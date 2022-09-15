@@ -2,12 +2,42 @@ import { useState, useEffect } from 'react'
 
 const People = (props) => {
     // state to hold formData
+    
+    const createPeople = async (personData) => {
+        try {
+            // make post request to create people
+            const newPerson = await fetch(BASE_URL, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(personData),
+            }
+            );
+            //the people are getting created, but the req.body is not getting passed on. 
+            
+            // testing API create request
+            // console.log(await newPerson.json())
+            
+            // trigger fetch of updated People to replace stale content
+            getPeople()
+            
+        } catch (err) {
+            console.log(err)
+            
+        }
+        console.log(personData)
+        //undefined. it's not grabbing person data from the form...how is it supposed to?
+    };
+    
     const [newForm, setNewForm] = useState({
         name: "",
         image: "",
         title: "",
     });
-
+    
+    const BASE_URL = "https://people-backend-lab.herokuapp.com/people";
+    
     // handleChange function for form
     const handleChange = (e) => {
         setNewForm({ ...newForm, [e.target.name]: e.target.value });
@@ -15,42 +45,17 @@ const People = (props) => {
     const handleSubmit = async (e) => {
 
         e.preventDefault()
-        const newPerson = await createPeople()
-
-        // reset the form
+        const newPerson = await createPeople(newForm)
+            //something is missing here. e.target?
+            // reset the form
+            console.log(e.target)
         setNewForm({ name: "", image: "", title: "" })
+
     }
-
-    const createPeople = async (personData) => {
-        try {
-
-            // make post request to create people
-            const newPerson = await fetch(URL, {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(personData),
-            });
-
-            // testing API create request
-            // console.log(await newPerson.json())
-
-            // trigger fetch of updated People to replace stale content
-            getPeople()
-
-        } catch (err) {
-            console.log(err)
-
-        }
-
-    };
-
-
+    
     const [people, setPeople] = useState([])
-
-    const BASE_URL = "https://people-backend-lab.herokuapp.com/people";
-
+    
+    
     const getPeople = async () => {
         try {
             const response = await fetch(BASE_URL)
