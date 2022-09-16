@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+import {Link} from "react-router-dom"
+
 const People = (props) => {
     // state to hold formData
     
@@ -14,8 +16,7 @@ const People = (props) => {
                 body: JSON.stringify(personData),
             }
             );
-            //the people are getting created, but the req.body is not getting passed on. 
-            
+       
             // testing API create request
             // console.log(await newPerson.json())
             
@@ -74,10 +75,13 @@ const People = (props) => {
     const loaded = () => {
         return people?.map((person) => {
             return (
-                <div key={person._id}>
+                <div key={person._id} className='person-card'>
+                    <Link to={`/people/${person._id}`}>
+
                     <h1>{person.name}</h1>
                     <img src={person.image} />
                     <h3>{person.title}</h3>
+                    </Link>
                 </div>
 
             );
@@ -130,6 +134,7 @@ const People = (props) => {
 
 
             {people && people.length ? loaded() : loading()
+            //what does this line mean? if people and people length exist, then set loaded() as loading?
             }</section>
     );
 
