@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const People = (props) => {
     // state to hold formData
-    
+
     const createPeople = async (personData) => {
         try {
             // make post request to create people
@@ -16,29 +16,29 @@ const People = (props) => {
                 body: JSON.stringify(personData),
             }
             );
-       
+
             // testing API create request
             // console.log(await newPerson.json())
-            
+
             // trigger fetch of updated People to replace stale content
             getPeople()
-            
+
         } catch (err) {
             console.log(err)
-            
+
         }
         console.log(personData)
         //undefined. it's not grabbing person data from the form...how is it supposed to?
     };
-    
+
     const [newForm, setNewForm] = useState({
         name: "",
         image: "",
         title: "",
     });
-    
+
     const BASE_URL = "https://people-backend-lab.herokuapp.com/people";
-    
+
     // handleChange function for form
     const handleChange = (e) => {
         setNewForm({ ...newForm, [e.target.name]: e.target.value });
@@ -47,16 +47,16 @@ const People = (props) => {
 
         e.preventDefault()
         const newPerson = await createPeople(newForm)
-            //something is missing here. e.target?
-            // reset the form
-            console.log(e.target)
+        //something is missing here. e.target?
+        // reset the form
+        console.log(e.target)
         setNewForm({ name: "", image: "", title: "" })
 
     }
-    
+
     const [people, setPeople] = useState([])
-    
-    
+
+
     const getPeople = async () => {
         try {
             const response = await fetch(BASE_URL)
@@ -78,9 +78,9 @@ const People = (props) => {
                 <div key={person._id} className='person-card'>
                     <Link to={`/people/${person._id}`}>
 
-                    <h1>{person.name}</h1>
-                    <img src={person.image} />
-                    <h3>{person.title}</h3>
+                        <h1>{person.name}</h1>
+                        <img src={person.image} />
+                        <h3>{person.title}</h3>
                     </Link>
                 </div>
 
@@ -103,7 +103,7 @@ const People = (props) => {
     );
 
     return (
-        <section className="people-list">
+        <section className='personIndexMain'>
             <div className="addNewForm">
                 <h2>Create a new person</h2>
                 <form onSubmit={handleSubmit}>
@@ -132,10 +132,13 @@ const People = (props) => {
                 </form>
             </div>
 
+            <section className="people-list">
 
-            {people && people.length ? loaded() : loading()
-            //what does this line mean? if people and people length exist, then set loaded() as loading?
-            }</section>
+                {people && people.length ? loaded() : loading()
+                    //what does this line mean? if people and people length exist, then set loaded() as loading?
+                }</section>
+
+        </section>
     );
 
 }
